@@ -5,7 +5,11 @@ from cryptography.hazmat.primitives import hashes
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(
+    title="API Signature Numérique",
+    description="API Backend pour la signature numérique et la vérification de l'authenticité de documents/textes. Créé pour le projet 'Sécurité Web à l'école'.",
+    version="1.0.0"
+)
 
 # CORS
 app.add_middleware(
@@ -33,13 +37,21 @@ private_key = rsa.generate_private_key(
 public_key = private_key.public_key()
 
 # ROUTES
-@app.get("/")
+@app.get("/", summary="Vérification de l'état de l'API")
 async def home():
+    """
+    Vérifie si l'API est en ligne et accessible.
+    """
     return {"message": "API Signature numérique OK"}
 
 # SIGN
-@app.post("/sign")
+@app.post("/sign", summary="Signer un document/message")
 def sign(data: SignRequest):
+    """
+    Génère une signature numérique pour le message fourni,
+    en utilisant la clé privée RSA générée au lancement de l'application.
+    La signature est retournée au format hexadécimal.
+    """
     signature = private_key.sign(
         data.message.encode(),
         padding.PSS(
@@ -51,8 +63,13 @@ def sign(data: SignRequest):
     return {"signature": signature.hex()}
 
 # VERIFY
-@app.post("/verify")
+@app.post("/verify", summary="Vérifier une signature")
 def verify(data: VerifyRequest):
+    """
+    Vérifie l'authenticité d'un message donné par rapport à sa signature,
+    en utilisant la clé publique correspondante.
+    Retourne `{"valid": True}` si la vérification est réussie, `{"valid": False}` sinon.
+    """
     try:
         public_key.verify(
             bytes.fromhex(data.signature),
