@@ -1,3 +1,4 @@
+```
 sec_web_signature_numerique/
 ├── main.py                 # Backend FastAPI
 ├── requirements.txt        # Dépendances Python
@@ -11,3 +12,5 @@ sec_web_signature_numerique/
     ├── index.html
     ├── vite.config.ts
     └── package.json
+
+
