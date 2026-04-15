@@ -40,7 +40,7 @@ export default function VerifyComponent() {
       }
       setIsValid(response.data.valid);
     } catch (err) {
-      setError('Erreur de validation. La signature est peut-être malformée ou l\'API est injoignable.');
+      setError('');
       setIsValid(false);
       console.error(err);
     } finally {
